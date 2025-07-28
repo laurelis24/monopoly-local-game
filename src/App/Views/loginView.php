@@ -11,12 +11,10 @@
   <input name="username" required>
   <input type="password" name="password" required>
 
-   <?php if (isset($error)) : ?>
+   <?php if (isset($error)): ?>
      
      <p>
-      <?php
-        echo $error
-       ?>
+      <?php echo $error; ?>
      </p>
     <?php endif; ?>
   <button type="submit">Login</button>

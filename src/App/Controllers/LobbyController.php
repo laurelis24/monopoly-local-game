@@ -7,7 +7,7 @@ use App\Router\View;
 use App\Session\Session;
 use PDOException;
 
-class LobbyController {
+class LobbyController extends BaseController {
     public static function index() {
         View::render('lobbies', [
             'lobbies' => Lobby::select(['id', 'name', 'start_money', 'status']),
@@ -19,7 +19,6 @@ class LobbyController {
     }
 
     public static function show(string $id, string $name) {
-
         //View::redirect("/");
         echo 'haha';
     }
@@ -31,9 +30,7 @@ class LobbyController {
         $startMoney = $_POST['start_money'] ?? null;
 
         if ($token !== Session::getParam('token')) {
-            http_response_code(403);
-            echo '<h1>Error 403</h1><p>Wrong CSRF token!</p>';
-            exit;
+            static::abort(403, 'Wrong CSRF token!');
         }
 
         try {
@@ -45,7 +42,6 @@ class LobbyController {
         } catch (PDOException $e) {
             //throw $th;
         }
-
 
         return View::redirect('/lobbies');
     }

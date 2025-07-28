@@ -7,14 +7,18 @@ use App\Controllers\AuthController;
 use App\Controllers\LobbyController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\GuestMiddleware;
-
-session_set_cookie_params([
-   'lifetime' => 1800,
-]);
+use App\Session\Session;
 
 ini_set('session.gc_maxlifetime', 1800);
 
-session_start();
+Session::setCookieParams([
+    'lifetime' => 0,
+    'path' => '/',
+    //"secure" => true,
+    'httponly' => true,
+    'samesite' => 'Strict',
+]);
+Session::start();
 $router = new Router();
 
 // main menu
@@ -27,13 +31,10 @@ $router->post('/logout', [AuthController::class, 'logout'])->middleware(AuthMidd
 $router->get('/register', [AuthController::class, 'register'])->middleware(GuestMiddleware::class);
 $router->post('/register', [AuthController::class, 'storeUser'])->middleware(GuestMiddleware::class);
 
-
 // lobby
 $router->get('/lobbies', [LobbyController::class, 'index'])->middleware(AuthMiddleware::class);
 $router->get('/lobby/create', [LobbyController::class, 'create'])->middleware(AuthMiddleware::class);
 $router->post('/lobby/create', [LobbyController::class, 'storeLobby'])->middleware(AuthMiddleware::class);
 $router->get('/lobby/{id}/product/{name}', [LobbyController::class, 'show'])->middleware(AuthMiddleware::class);
-
-
 
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

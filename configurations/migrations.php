@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/config.php';
 
 use App\Database\DB;
@@ -6,15 +7,19 @@ use App\Database\DB;
 $db = DB::getInstance();
 $db->createDatabase();
 
-$db->createTable('users', '
+$db->createTable(
+    'users',
+    '
      id INT AUTO_INCREMENT PRIMARY KEY,
      username VARCHAR(255) NOT NULL UNIQUE,
      password VARCHAR(255) NOT NULL,
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-');
+',
+);
 
-
-$db->createTable('lobbies', '
+$db->createTable(
+    'lobbies',
+    '
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     password VARCHAR(255),
@@ -23,9 +28,12 @@ $db->createTable('lobbies', '
     status BOOLEAN NOT NULL DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (host_user_id) REFERENCES users(id) ON DELETE CASCADE
-');
+',
+);
 
-$db->createTable('lobby_users', '
+$db->createTable(
+    'lobby_users',
+    '
     id INT AUTO_INCREMENT PRIMARY KEY,
     lobby_id INT NOT NULL,
     user_id INT NOT NULL,
@@ -39,7 +47,8 @@ $db->createTable('lobby_users', '
     FOREIGN KEY (lobby_id) REFERENCES lobbies(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE (lobby_id, user_id)
-');
+',
+);
 $str = implode(', ', $db->getTablesName());
 echo "Database: '{$db->getDbName()}' and tables '$str' created successfully." . PHP_EOL;
-exit;
+exit();

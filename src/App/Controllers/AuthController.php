@@ -16,7 +16,7 @@ class AuthController {
     }
 
     public static function logout() {
-        session_destroy();
+        Session::destroy();
         View::redirect('/');
     }
 
@@ -24,18 +24,18 @@ class AuthController {
         $username = $_POST['username'] ?? null;
         $password = $_POST['password'] ?? null;
 
-
         try {
-            $userId = User::create(['username' => $username, 'password' => password_hash($password, PASSWORD_BCRYPT)]);
+            $userId = User::create([
+                'username' => $username,
+                'password' => password_hash($password, PASSWORD_BCRYPT),
+            ]);
 
             if ($userId) {
                 Session::setParam('user_id', $userId);
                 session_regenerate_id(true);
                 Session::setParam('token', bin2hex(random_bytes(32)));
                 return View::redirect('/');
-
-            } ;
-
+            }
         } catch (PDOException $e) {
             if ($e->getCode() === '23000') {
                 Session::setParam('usernameError', 'Username already taken!');
@@ -43,17 +43,12 @@ class AuthController {
             }
         }
 
-
-
-
         return View::redirect('/');
     }
-
 
     public static function loginUser() {
         $username = $_POST['username'] ?? null;
         $password = $_POST['password'] ?? null;
-
 
         $user = User::findByUsername($username);
 
@@ -65,10 +60,14 @@ class AuthController {
                 Session::setParam('token', bin2hex(random_bytes(32)));
                 return View::redirect('/');
             } else {
-                return View::render('/login', ['error' => 'Wrong username or password!']);
+                return View::render('/login', [
+                    'error' => 'Wrong username or password!',
+                ]);
             }
         } else {
-            return  View::render('/login', ['error' => 'Wrong username or password!']);
+            return View::render('/login', [
+                'error' => 'Wrong username or password!',
+            ]);
         }
     }
 }

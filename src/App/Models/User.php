@@ -32,7 +32,7 @@ class User {
         return null;
     }
 
-    public static function findByUsername(string $username): UserEntity | bool {
+    public static function findByUsername(string $username): UserEntity|bool {
         $db = DB::getInstance()->getConnection();
 
         $stmt = $db->prepare('SELECT id, username, password FROM users WHERE username = :username');
@@ -43,7 +43,7 @@ class User {
         return $stmt->fetch();
     }
 
-    public static function findById(int $id): UserEntity | bool {
+    public static function findById(int $id): UserEntity|bool {
         $db = DB::getInstance()->getConnection();
 
         $stmt = $db->prepare('SELECT id, username, password FROM users WHERE id = :id');

@@ -15,14 +15,12 @@ class DB {
 
     private array $tables = [];
 
-
     public function __construct() {
-        $this->driver   = $_ENV['DATABASE_DRIVER'] ?? 'mysql';
-        $this->host     = $_ENV['DATABASE_HOST'] ?? '127.0.0.1';
-        $this->dbName   = $_ENV['DATABASE_NAME'] ?? 'my_app';
-        $this->user     = $_ENV['DATABASE_USER'] ?? 'root';
+        $this->driver = $_ENV['DATABASE_DRIVER'] ?? 'mysql';
+        $this->host = $_ENV['DATABASE_HOST'] ?? '127.0.0.1';
+        $this->dbName = $_ENV['DATABASE_NAME'] ?? 'my_app';
+        $this->user = $_ENV['DATABASE_USER'] ?? 'root';
         $this->password = $_ENV['DATABASE_PASSWORD'] ?? '';
-
 
         try {
             $this->connectToDatabase();
@@ -54,7 +52,6 @@ class DB {
             die('DB ERROR (createDatabase): ' . $e->getMessage());
         }
     }
-
 
     public function createTable(string $name, string $columns) {
         try {

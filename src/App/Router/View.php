@@ -23,16 +23,16 @@ class View {
     public static function render(string $view, array $data = []): void {
         echo self::get($view, $data);
         Session::unsetParam('usernameError');
-        exit;
+        exit();
     }
 
     public static function redirect(string $url) {
         header("Location: $url");
-        exit;
+        exit();
     }
 
     public static function errorPage(array $data = []) {
         echo self::get('404', $data);
-        exit;
+        exit();
     }
 }

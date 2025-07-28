@@ -10,8 +10,8 @@ class MainController {
         // if (!$_SESSION["username"]){
         //     View::redirect("login");
         // }
-        View::render('main', ['isLoggedIn' => Auth::loggedIn()]);
+        View::render('main', [
+            'isLoggedIn' => Auth::loggedIn(),
+        ]);
     }
-
-
 }

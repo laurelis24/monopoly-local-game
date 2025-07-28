@@ -20,14 +20,12 @@ class Router {
         return $route;
     }
 
-
     public function dispatch(string $requestUri, string $requestMethod) {
         $uri = rtrim(parse_url($requestUri, PHP_URL_PATH), '/') ?: '/';
         $method = strtoupper($requestMethod);
 
         foreach ($this->routes[$method] ?? [] as $route) {
             if (preg_match($route->pattern, $uri, $matches)) {
-
                 // run middlewares
                 foreach ($route->middlewares as $mw) {
                     if (is_callable([$mw, 'handle'])) {
@@ -41,31 +39,12 @@ class Router {
                     $args[] = $matches[$param] ?? null;
                 }
 
-
                 call_user_func($route->callback, ...$args);
                 return;
             }
-
-
         }
 
         http_response_code(404);
         View::errorPage();
-
-        // if (isset($this->routes[$method][$uri])) {
-        //     $route = $this->routes[$method][$uri];
-
-        //     foreach ($route->middlewares as $middleware) {
-        //         if (is_callable([$middleware, 'handle'])) {
-        //             $middleware::handle();
-        //         };
-
-        //     }
-
-        //     call_user_func($route->callback);
-        // } else {
-        //     http_response_code(404);
-        //     View::errorPage();
-        // }
     }
 }

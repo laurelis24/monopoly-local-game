@@ -9,12 +9,10 @@
     <h1>Register</h1>
    <form method="POST" action="/register">
   <input type="text" name="username" placeholder="Username" required><br>
-    <?php if (!empty($_SESSION['usernameError'])) : ?>
+    <?php if (!empty($_SESSION['usernameError'])): ?>
      
      <p>
-      <?php
-        echo $_SESSION['usernameError'];
-        ?>
+      <?php echo $_SESSION['usernameError']; ?>
      </p>
     <?php endif; ?>
   <input type="password" name="password" placeholder="Password" required><br>

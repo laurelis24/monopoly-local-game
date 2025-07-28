@@ -38,8 +38,9 @@ class Lobby {
             return false;
         }
 
-
-        $stmt = $db->prepare('INSERT INTO lobbies (name, password, start_money, host_user_id) VALUES (:name, :password, :start_money, :host_user_id)');
+        $stmt = $db->prepare(
+            'INSERT INTO lobbies (name, password, start_money, host_user_id) VALUES (:name, :password, :start_money, :host_user_id)',
+        );
         $hostId = Auth::userId();
         return $stmt->execute([
             ':name' => $data['name'],
@@ -49,8 +50,7 @@ class Lobby {
         ]);
     }
 
-
-    public static function findById(int $id): LobbyEntity | bool {
+    public static function findById(int $id): LobbyEntity|bool {
         $db = DB::getInstance()->getConnection();
 
         $stmt = $db->prepare('SELECT id, name, start_money, status FROM lobbies WHERE id = :id');
@@ -60,5 +60,4 @@ class Lobby {
         $stmt->setFetchMode(PDO::FETCH_CLASS, Lobby::class);
         return $stmt->fetch();
     }
-
 }

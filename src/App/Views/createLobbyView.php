@@ -9,7 +9,7 @@
     <h1>Create lobby</h1>
 
     <form  action="/lobby/create" method="post">
-         <input type="hidden" name="token"  value="<?= $_SESSION['token']; ?>">
+         <input type="hidden" name="token"  value="<?= $_SESSION['token'] ?>">
         <label for="name">Name:</label>
         <br>
         <input id="name" name="name" type="text" required>

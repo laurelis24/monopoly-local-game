@@ -9,10 +9,8 @@
 
 <body>
     <h1>Lobbies</h1>
-    <?php
-        print_r($lobbies);
-    ?>
-    <?php if (isset($lobbies) && count($lobbies) <= 0) : ?>
+    <?php print_r($lobbies); ?>
+    <?php if (isset($lobbies) && count($lobbies) <= 0): ?>
 
 
         <?php foreach ($lobbies as $lobby): ?>

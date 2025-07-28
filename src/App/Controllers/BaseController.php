@@ -2,13 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Router\View;
+
 class BaseController {
-    //  abstract public static function login();
-    //  abstract public static function register();
-    //  abstract public static function storeUser();
-    //  abstract public static function logout();
-
-    private function abort(int $code, $message) {
-
+    public static function abort(int $code, $message) {
+        http_response_code($code);
+        return View::render('404', [
+            'code' => $code,
+            'message' => $message,
+        ]);
     }
 }
