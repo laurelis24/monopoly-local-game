@@ -31,5 +31,10 @@ class Session {
     public static function destroy() {
         session_unset();
         session_destroy();
+
+    }
+
+    public static function setHandler(object $sessionHandler, bool $register_shutdown = true) {
+        session_set_save_handler($sessionHandler, $register_shutdown);
     }
 }

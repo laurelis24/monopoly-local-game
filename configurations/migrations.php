@@ -18,6 +18,18 @@ $db->createTable(
 );
 
 $db->createTable(
+    'sessions',
+    '
+     id VARCHAR(128) PRIMARY KEY,
+     data BLOB NOT NULL,
+     iv BLOB NOT NULL,
+     tag BLOB NOT NULL,
+     last_activity INT NOT NULL,    
+     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+',
+);
+
+$db->createTable(
     'lobbies',
     '
     id INT AUTO_INCREMENT PRIMARY KEY,

@@ -8,9 +8,12 @@ use App\Controllers\LobbyController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\GuestMiddleware;
 use App\Session\Session;
+use App\Session\SessionHandler;
 
 ini_set('session.gc_maxlifetime', 1800);
 
+$sessionHanlder = new SessionHandler();
+Session::setHandler($sessionHanlder, true);
 Session::setCookieParams([
     'lifetime' => 0,
     'path' => '/',
