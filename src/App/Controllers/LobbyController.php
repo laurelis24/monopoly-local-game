@@ -9,9 +9,10 @@ use PDOException;
 
 class LobbyController extends BaseController {
     public static function index() {
+        $lobbies = Lobby::select(['lobbies.id', 'username as host_user', 'name'])->join('users', 'users.id', '=', 'lobbies.host_user_id')->get();
+
         View::render('lobbies', [
-            'lobbies' => Lobby::select(['id', 'name', 'start_money', 'status']),
-        ]);
+            'lobbies' => $lobbies]);
     }
 
     public static function create() {

@@ -13,23 +13,8 @@ class LobbyEntity {
     public bool $status;
 }
 
-class Lobby {
-    public static function all() {
-        $db = DB::getInstance()->getConnection();
-        $stmt = $db->prepare('SELECT * FROM lobbies');
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public static function select(array $values) {
-        $db = DB::getInstance()->getConnection();
-        $columns = join(', ', $values);
-        $stmt = $db->prepare("SELECT $columns FROM lobbies");
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+class Lobby extends Model {
+    protected static string $table = 'lobbies';
 
     public static function create(array $data) {
         $db = DB::getInstance()->getConnection();

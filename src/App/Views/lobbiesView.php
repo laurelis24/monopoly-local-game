@@ -9,13 +9,13 @@
 
 <body>
     <h1>Lobbies</h1>
-    <?php print_r($lobbies); ?>
-    <?php if (isset($lobbies) && count($lobbies) <= 0): ?>
+    <?php if (isset($lobbies) && count($lobbies) > 0): ?>
 
 
         <?php foreach ($lobbies as $lobby): ?>
-            <div>
+            <div style="">
                 <p>Lobby Name: <?= htmlspecialchars($lobby['name']) ?></p>
+                <p>Host user: <?= htmlspecialchars($lobby['host_user']) ?></p>
             </div>
         <?php endforeach; ?>
 
