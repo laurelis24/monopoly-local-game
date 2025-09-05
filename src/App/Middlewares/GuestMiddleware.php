@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Middleware;
+namespace App\Middlewares;
 
 use App\Auth\Auth;
 use App\Router\View;
 
-class GuestMiddleware {
-    public static function handle(): void {
+class GuestMiddleware extends Middleware {
+    public function handle(): void {
         if (Auth::loggedIn()) {
             View::redirect('/');
-            exit();
         }
     }
 }

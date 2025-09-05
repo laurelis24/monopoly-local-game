@@ -2,7 +2,10 @@
 
 namespace App\Database;
 
+use App\QueryBuilder;
 use PDO;
+use PDOException;
+use RuntimeException;
 
 class DB {
     private static ?DB $instance = null;
@@ -31,14 +34,25 @@ class DB {
 
     private function connectToServer(): void {
         $dsn = "{$this->driver}:host={$this->host}";
-        $this->pdo = new PDO($dsn, $this->user, $this->password);
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $this->pdo = new PDO($dsn, $this->user, $this->password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Connection to server failed: ' . $e->getMessage());
+        }
+
     }
 
     public function connectToDatabase(): void {
         $dsn = "{$this->driver}:host={$this->host};dbname={$this->dbName}";
-        $this->pdo = new PDO($dsn, $this->user, $this->password);
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        try {
+            $this->pdo = new PDO($dsn, $this->user, $this->password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Connection to database failed: ' . $e->getMessage());
+        }
+
     }
 
     public function createDatabase(): void {
@@ -48,8 +62,8 @@ class DB {
             $sql = "CREATE DATABASE IF NOT EXISTS `{$this->dbName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
             $this->pdo->exec($sql);
             $this->connectToDatabase();
-        } catch (\Throwable $e) {
-            die('DB ERROR (createDatabase): ' . $e->getMessage());
+        } catch (PDOException $e) {
+            throw new RuntimeException('Create database failed: ' . $e->getMessage());
         }
     }
 
@@ -61,9 +75,22 @@ class DB {
             $this->pdo->exec($sql);
 
             array_push($this->tables, $name);
-        } catch (\Throwable $e) {
-            die('DB ERROR (createTable): ' . $e->getMessage());
+        } catch (PDOException $e) {
+            throw new RuntimeException('Create table failed: ' . $e->getMessage());
         }
+    }
+
+    public function insertInto(string $table, array $params) {
+        $qBuilder = new QueryBuilder($table);
+        $sql = $qBuilder->buildCreateQuery($params);
+
+        try {
+            $stmp = $this->pdo->prepare($sql);
+            $stmp->execute($params);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Failed to insert data: ' . $e->getMessage());
+        }
+
     }
 
     public static function getInstance(): DB {

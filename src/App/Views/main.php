@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main menu</title>
 
-    <script src="../../../js/javascript.js" defer></script>
-</head>
-<body>
+    <?php
+     $title = 'Main'
+    ?>
     <?php if ($isLoggedIn): ?>
      <a href="lobby/create">Create lobby</a>
      <a href="lobbies">Lobbies</a>
@@ -21,6 +15,3 @@
            <a href="login">Login</a>
            <a href="register">Register</a>
     <?php endif; ?>
-     
-</body>
-</html>

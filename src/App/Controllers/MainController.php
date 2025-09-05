@@ -6,7 +6,7 @@ use App\Auth\Auth;
 use App\Router\View;
 
 class MainController {
-    public static function index() {
+    public function index() {
         View::render('main', [
             'isLoggedIn' => Auth::loggedIn(),
         ]);

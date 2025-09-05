@@ -5,7 +5,7 @@ namespace App\Router;
 interface IRoute {
     public string $method {get;}
     public string $uri {get;}
-    public $callback {get;}
+    public array $callback {get;}
     public array $middlewares {get;}
     public array $params {get;}
 }
@@ -13,7 +13,7 @@ interface IRoute {
 class Route implements IRoute {
     public string $method;
     public string $uri;
-    public $callback;
+    public array $callback;
     public array $middlewares = [];
 
     public string $pattern;

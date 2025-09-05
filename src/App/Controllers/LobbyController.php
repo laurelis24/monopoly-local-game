@@ -9,19 +9,19 @@ use PDOException;
 
 class LobbyController extends BaseController {
     public static function index() {
-        $lobbies = Lobby::select(['lobbies.id', 'username as host_user', 'name'])->join('users', 'users.id', '=', 'lobbies.host_user_id')->get();
+        //  $lobbies = Lobby::select(['lobbies.id', 'username as host_user', 'name'])->join('users', 'users.id', '=', 'lobbies.host_user_id')->get();
 
-        View::render('lobbies', [
-            'lobbies' => $lobbies]);
+        // View::render('lobbies', [
+        //     'lobbies' => $lobbies]);
     }
 
     public static function create() {
         View::render('createLobby');
     }
 
-    public static function show(string $id, string $name) {
-        //View::redirect("/");
-        echo 'haha';
+    public static function show(string $id) {
+        //  $lobby = Lobby::select(["id", "name", "host_user_id", ""])->
+        // echo 'haha';
     }
 
     public static function storeLobby() {
@@ -31,8 +31,14 @@ class LobbyController extends BaseController {
         $startMoney = $_POST['start_money'] ?? null;
 
         if ($token !== Session::getParam('token')) {
-            static::abort(403, 'Wrong CSRF token!');
+            static::abort(403, ['Wrong CSRF token!']);
         }
+
+        // if ($name === null || $password === null || $startMoney === null) {
+        //     static::abort(403, 'Wrong inputs');
+        // }
+        //$validaror =
+        //   $validator = self::$validate->validate();
 
         try {
             Lobby::create([

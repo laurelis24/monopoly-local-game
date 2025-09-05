@@ -9,6 +9,7 @@
 
 <body>
   <h1>
+    
     <?php if (isset($code) && isset($message)): ?>
       <?= htmlspecialchars($code . ' - ' . $message) ?>
     <?php else: ?>

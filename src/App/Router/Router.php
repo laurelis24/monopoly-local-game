@@ -2,18 +2,20 @@
 
 namespace App\Router;
 
+use App\Request\Request;
+
 class Router {
     private array $routes = [];
 
-    public function get(string $uri, callable $callback) {
+    public function get(string $uri, array $callback) {
         return $this->addRoute('GET', $uri, $callback);
     }
 
-    public function post(string $uri, callable $callback) {
+    public function post(string $uri, array $callback) {
         return $this->addRoute('POST', $uri, $callback);
     }
 
-    private function addRoute(string $method, string $uri, callable $callback) {
+    private function addRoute(string $method, string $uri, array $callback) {
         $route = new Route($method, $uri, $callback);
         $this->routes[$method][] = $route;
 
@@ -28,9 +30,11 @@ class Router {
             if (preg_match($route->pattern, $uri, $matches)) {
                 // run middlewares
                 foreach ($route->middlewares as $mw) {
-                    if (is_callable([$mw, 'handle'])) {
-                        $mw::handle();
+                    if (method_exists($mw, 'handle')) {
+                        $mWare = new $mw();
+                        $mWare->handle();
                     }
+
                 }
 
                 // collect args in order {id},{other}...
@@ -39,12 +43,14 @@ class Router {
                     $args[] = $matches[$param] ?? null;
                 }
 
-                call_user_func($route->callback, ...$args);
+                $controller = new $route->callback[0]();
+
+                $controller->{$route->callback[1]}(new Request(), ...$args);
+
                 return;
             }
         }
 
-        http_response_code(404);
-        View::errorPage();
+        return View::errorPage();
     }
 }

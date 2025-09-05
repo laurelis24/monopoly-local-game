@@ -13,7 +13,7 @@
 
 
         <?php foreach ($lobbies as $lobby): ?>
-            <div style="">
+            <div>
                 <p>Lobby Name: <?= htmlspecialchars($lobby['name']) ?></p>
                 <p>Host user: <?= htmlspecialchars($lobby['host_user']) ?></p>
             </div>

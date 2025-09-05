@@ -6,15 +6,16 @@ use App\Database\DB;
 use PDO;
 
 class QueryBuilder {
-    private PDO $pdo;
+    // private PDO $pdo;
     private string $table;
+
     private array $selects = ['*'];
     private $whereParams = [];
     private $joins = [];
     private int $limit = 0;
 
     public function __construct(string $table) {
-        $this->pdo = DB::getInstance()->getConnection();
+        // $this->pdo = DB::getInstance()->getConnection();
         $this->table = $table;
     }
 
@@ -47,7 +48,7 @@ class QueryBuilder {
         return $this;
     }
 
-    private function buildQuery() {
+    private function buildReadQuery() {
         $selects = join(', ', $this->selects);
         $wheres = join(' ', array_map(function ($val) {
             return gettype($val) === 'array' ? join(' ', $val) : $val;
@@ -64,11 +65,27 @@ class QueryBuilder {
     }
 
 
+    public function buildCreateQuery(array $params) {
+        $columns = [];
+        $params = [];
+        foreach ($params as $key => $_) {
+            $columns[] = $key;
+            $params[] = ":$key";
+        }
+        $joinedColumns = $columns.join(', ', $columns);
+        $joinedParams = $params.join(', ', $params);
+        return "INSERT INTO $this->table ($joinedColumns) VALUES ($joinedParams)";
+    }
+
     public function get() {
-        $sql = $this->buildQuery();
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = $this->buildReadQuery();
+        // $stmt = $this->pdo->prepare($sql);
+        //  $stmt->execute();
+        //   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function create(array $data) {
+        return $this->buildCreateQuery($data);
     }
 
 }

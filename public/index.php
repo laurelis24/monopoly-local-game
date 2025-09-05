@@ -1,12 +1,13 @@
 <?php
 
 require_once '../configurations/config.php';
+require_once '../src/App/Helpers/abort.php';
 use App\Controllers\MainController;
 use App\Router\Router;
 use App\Controllers\AuthController;
 use App\Controllers\LobbyController;
-use App\Middleware\AuthMiddleware;
-use App\Middleware\GuestMiddleware;
+use App\Middlewares\AuthMiddleware;
+use App\Middlewares\GuestMiddleware;
 use App\Session\Session;
 use App\Session\SessionHandler;
 
@@ -25,7 +26,7 @@ Session::start();
 $router = new Router();
 
 // main menu
-$router->get('/', [MainController::class, 'index']);
+$router->get('/', [MainController::class, 'index'])->middleware(AuthMiddleware::class);
 
 // register and login/logout
 $router->get('/login', [AuthController::class, 'login'])->middleware(GuestMiddleware::class);
@@ -38,6 +39,6 @@ $router->post('/register', [AuthController::class, 'storeUser'])->middleware(Gue
 $router->get('/lobbies', [LobbyController::class, 'index'])->middleware(AuthMiddleware::class);
 $router->get('/lobby/create', [LobbyController::class, 'create'])->middleware(AuthMiddleware::class);
 $router->post('/lobby/create', [LobbyController::class, 'storeLobby'])->middleware(AuthMiddleware::class);
-$router->get('/lobby/{id}/product/{name}', [LobbyController::class, 'show'])->middleware(AuthMiddleware::class);
+$router->get('/lobby/{id}', [LobbyController::class, 'show'])->middleware(AuthMiddleware::class);
 
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

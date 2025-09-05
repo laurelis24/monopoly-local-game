@@ -19,10 +19,6 @@ class Lobby extends Model {
     public static function create(array $data) {
         $db = DB::getInstance()->getConnection();
 
-        if ($data['name'] === null || $data['password'] === null || $data['start_money'] === null) {
-            return false;
-        }
-
         $stmt = $db->prepare(
             'INSERT INTO lobbies (name, password, start_money, host_user_id) VALUES (:name, :password, :start_money, :host_user_id)',
         );
